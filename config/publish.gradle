@@ -11,26 +11,32 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.sourceFiles
 }
 
-task androidJavadocs(type: Javadoc) {
-    failOnError = false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
+// Wyłączamy generowanie Javadoc dla JitPack
+if (!System.getenv('JITPACK')) {
+    task androidJavadocs(type: Javadoc) {
+        failOnError = false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
 
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    archiveClassifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+        archiveClassifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }
 
-artifacts {
-    archives androidJavadocsJar
+    artifacts {
+        archives androidJavadocsJar
+    }
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact androidSourcesJar
-            artifact androidJavadocsJar
+            
+            if (!System.getenv('JITPACK')) {
+                artifact androidJavadocsJar
+            }
 
             groupId = ARTIFACT_PACKAGE
             artifactId = ARTIFACT_NAME
