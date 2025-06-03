@@ -14,6 +14,7 @@ task androidSourcesJar(type: Jar) {
 task androidJavadocs(type: Javadoc) {
     failOnError = false
     source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
 task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
@@ -34,12 +35,18 @@ publishing {
             groupId = ARTIFACT_PACKAGE
             artifactId = ARTIFACT_NAME
             version = ARTIFACT_VERSION
+
             pom {
                 packaging = ARTIFACT_PACKAGING
             }
+
             afterEvaluate {
                 from components.release
             }
         }
     }
+}
+
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
 }
