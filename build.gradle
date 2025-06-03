@@ -14,6 +14,7 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://raw.github.com/synergian/wagon-git/releases" }
+        maven { url 'https://jitpack.io' }
     }
 }
 
