@@ -6,13 +6,12 @@ dependencies {
     implementation 'org.apache.maven.wagon:wagon-http:3.4.1'
 }
 
-task androidSourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-// Wyłączamy generowanie Javadoc dla JitPack
 if (!System.getenv('JITPACK')) {
+    task androidSourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from android.sourceSets.main.java.sourceFiles
+    }
+
     task androidJavadocs(type: Javadoc) {
         failOnError = false
         source = android.sourceSets.main.java.sourceFiles
@@ -25,6 +24,7 @@ if (!System.getenv('JITPACK')) {
     }
 
     artifacts {
+        archives androidSourcesJar
         archives androidJavadocsJar
     }
 }
@@ -32,12 +32,6 @@ if (!System.getenv('JITPACK')) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact androidSourcesJar
-            
-            if (!System.getenv('JITPACK')) {
-                artifact androidJavadocsJar
-            }
-
             groupId = ARTIFACT_PACKAGE
             artifactId = ARTIFACT_NAME
             version = ARTIFACT_VERSION
