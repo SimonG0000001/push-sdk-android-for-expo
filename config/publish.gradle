@@ -32,14 +32,10 @@ if (!System.getenv('JITPACK')) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact androidSourcesJar {
-                classifier = 'sources'
-            }
+            artifact androidSourcesJar
             
             if (!System.getenv('JITPACK')) {
-                artifact androidJavadocsJar {
-                    classifier = 'javadoc'
-                }
+                artifact androidJavadocsJar
             }
 
             groupId = ARTIFACT_PACKAGE
