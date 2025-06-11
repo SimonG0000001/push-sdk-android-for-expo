@@ -5,7 +5,7 @@ apply from: '../config/publish.gradle'
 
 android {
     namespace 'com.vibes.vibes'
-    compileSdk 34
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 23
